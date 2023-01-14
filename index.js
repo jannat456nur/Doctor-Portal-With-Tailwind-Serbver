@@ -19,6 +19,7 @@ async function run() {
     try {
         const database = client.db('doctorportal');
         const appointmentOptionCollection = database.collection('appointmentOptions');
+        const bookingCollection = database.collection('/bookings')
         
         console.log('Connected correctly to server');
         
@@ -28,6 +29,13 @@ async function run() {
             const appointment = await cursor.toArray();
             res.send(appointment)
             console.log('hit jairam gi')
+        })
+
+        app.post('/bookings',async(req,res) =>{
+            const booking = req.body;
+            console.log(booking)
+            const result = await bookingCollection.insertOne(booking)
+            res.json(result)
         })
     } finally {
         // Ensures that the client will close when you finish/error
