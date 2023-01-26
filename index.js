@@ -45,6 +45,7 @@ async function run() {
     )
     const bookingCollection = database.collection('/bookings')
     const userCollection = database.collection('/users')
+    const doctorsCollection = database.collection('/doctors')
 
     console.log('Connected correctly to server')
 
@@ -115,6 +116,13 @@ async function run() {
       const query = { email: email }
       const bookings = await bookingCollection.find(query).toArray()
       res.send(bookings)
+    })
+
+    app.get('/appointmentSpeciality',async(req,res)=>{
+      const query = {}
+      const result = await appointmentOptionCollection.find(query).project({name:1}).toArray()
+      res.send(result);
+
     })
     // app.get('/bookings', verifyJWT, async (req, res) => {
     //   const email = req.query.email;
@@ -199,6 +207,18 @@ async function run() {
         },
       }
       const result = await userCollection.updateOne(filter, options, updatedDoc)
+      res.send(result)
+    })
+    app.get('/doctors',async(req,res)=>{
+      const query = {};
+      const doctors = await doctorsCollection.find(query).toArray()
+      res.send(doctors)
+    })
+    //doctors 
+
+    app.post('/doctors',async(req,res)=>{
+      const doctor = req.body;
+      const result = await doctorsCollection.insertOne(doctor)
       res.send(result)
     })
   } finally {
